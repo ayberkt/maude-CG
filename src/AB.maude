@@ -1,0 +1,49 @@
+fmod AB is
+  protecting TRUTH .
+  sorts Type Word Words .
+  subsort Word < Words  .
+
+  op _\\_ : Type Type -> Type [ctor] .
+  op _//_ : Type Type -> Type [ctor] .
+  op lex  : Word -> Type .
+  op _$_  : Type Type -> Type .
+  op _ _  : Words Words -> Words [ctor prec 41] .
+  op lex  : Word -> Type .
+  op well-typed : Words -> Bool .
+  op is-word : Words -> Bool .
+  op typeof : Words -> Type .
+
+  op noun        : -> Type [ctor] .
+  op sentence    : -> Type [ctor] .
+  op noun-phrase : -> Type [ctor] .
+
+  op man   : -> Word [ctor] .
+  op woman : -> Word [ctor] .
+  op the   : -> Word [ctor] .
+  op and   : -> Word [ctor] .
+
+  vars WS WS' : Words .
+  vars W W1 W2  : Word .
+
+  eq lex(man)    = noun .
+  eq lex(woman)  = noun .
+  eq lex(the)    = noun-phrase // noun .
+  eq lex(and)    = noun-phrase \\ (noun-phrase // noun-phrase) .
+
+  eq is-word(man)    = true .
+  eq is-word(woman)  = true .
+  eq is-word(the)    = true .
+  eq is-word(and)    = true .
+  eq is-word(WS)      = false [owise] .
+
+  eq typeof(W) = lex(W) .
+  eq typeof(W1 W2) = lex(W1) $ lex(W2) .
+  eq typeof(W WS)  = typeof(W) $ (typeof(W) \\ typeof(WS)) .
+  eq typeof(WS W)  = (typeof(WS) // typeof(W)) $ typeof(W) .
+
+  vars X Y Z : Type .
+
+  eq X $ (X \\ Y) = Y .
+  eq (Y // X) $ X = Y .
+
+endfm
